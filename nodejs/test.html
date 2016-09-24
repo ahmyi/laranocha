@@ -53,32 +53,71 @@
 </head>
 
 <body>
-    <div class="container">
+    <div id="container">
         <ul id="messages">
-            <li v-for='message in messages'>{{ message }}</li>
+            <li v-for='message in messages'>{{ message.text }}</li>
         </ul>
         <div class='form'>
-            <input id="m" autocomplete="off" /><a href='#' v-on:click='send'>Send</a> </div>
+            <input v-model='input' id="m" autocomplete="off" /><a href='#' v-on:click='sendmsg'>Send</a> </div>
     </div>
     <script src="bower_components/vue/dist/vue.min.js"></script>
     <script src="http://localhost:8080/socket.io/socket.io.js"></script>
     <script>
         var socket = io('http://localhost:8080');
-        socket.on('getUser', function (data) {
-            socket.emit('item', { news: 'item' });
-        });
-        var AppVue = new Vue({
-            el: '#messages'
-            , data: {
-                messages: []
+        
+//        socket.on('connect', function (data) {
+//            console.log('Connected');
+//             
+//        });  
+        function makeid(){
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+            for( var i=0; i < 5; i++ )
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+            return text;
+        }
+        var session = makeid();
+        socket.on('response',function(data){
+            if(data.session != session){
+              AppVue.addMessage(data.session,data.message);  
             }
-            , method: {
-                send: function (e) {
+              
+        });
+        
+        var AppVue = new Vue({
+            el: '#container'
+            , data: {
+                messages: [],
+                input:''
+            }
+            , methods: {
+                addMessage:function(ses,msg){
+                    this.messages.push({
+                        text:ses+":"+msg
+                    });
+                },
+                sendmsg: function (e) {
+                    var input = this.input;
+                    socket.emit('request', { 
+                        controller: 'Messages',
+                        action:'add',
+                        data:{
+                            message:input
+                        },
+                        session:session
+                    });
+                    this.messages.push({
+                        text:session+":"+input
+                    });
+                    this.input = '';
                     e.preventDefault();
                     
                 }
             }
         });
+        
         
     </script>
 </body>
