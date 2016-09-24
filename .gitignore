@@ -5,3 +5,4 @@
 /node_modules/
 /nodejs/bower_components/
 /nodejs/node_modules/
+/nodejs/src/Config/database.js

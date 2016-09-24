@@ -54,13 +54,12 @@
 
 <body>
     <div class="container">
-        <ul id="messages" v-foreach='message in messages'>
-            <li>{{message}}</li>
+        <ul id="messages">
+            <li v-for='message in messages'>{{ message }}</li>
         </ul>
         <div class='form'>
             <input id="m" autocomplete="off" /><a href='#' v-on:click='send'>Send</a> </div>
     </div>
-    <script src="http://localhost:8080/socket.io/socket.io.js"></script>
     <script src="bower_components/vue/dist/vue.min.js"></script>
     <script src="http://localhost:8080/socket.io/socket.io.js"></script>
     <script>
@@ -69,7 +68,7 @@
             socket.emit('item', { news: 'item' });
         });
         var AppVue = new Vue({
-            el: '#container'
+            el: '#messages'
             , data: {
                 messages: []
             }
