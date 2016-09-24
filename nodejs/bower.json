@@ -1,0 +1,20 @@
+{
+  "name": "laranocha",
+  "description": "Chat using nodejs and laravel",
+  "main": "app.js",
+  "authors": [
+    "ahmyi <cryptoamity@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "vue": "^1.0.27"
+  }
+}
